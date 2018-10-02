@@ -5,6 +5,7 @@
  */
 package com.github.kellielarsen.kattisproblem;
 /* @author kellie */
+import java.io.File;
 import java.util.Scanner;
 import java.io.PrintStream;
 import java.lang.Math;
@@ -41,6 +42,7 @@ public class AboveAverageProblem {
         double printAboveAverage;
         PrintStream print;
         print = new PrintStream(System.out);
+        //File file = new File("src/main/resources/input.txt");
         try (Scanner scan = new Scanner(System.in)) {
             while (scan.hasNextInt()) {
                 numRecords = scan.nextInt();
