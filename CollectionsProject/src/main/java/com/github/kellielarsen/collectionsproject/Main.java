@@ -5,10 +5,10 @@ package com.github.kellielarsen.collectionsproject;
 public class Main {
     
     public static void main(String args[]) throws Exception {
-        Employee Chris = new Employee("Chris", 123456);
-        Chris.payRate = 10.50;
-        Chris.hours = 40;
-        Tax ChrisTax = new Tax(Chris);
-        Payroll ChrisPay = new Payroll(Chris);
+        Employee emp = new Employee("name", 123456);
+        emp.payRate = 10.50;
+        emp.hours = 40;
+        Tax emptax = new Tax(emp);
+        Payroll emppay = new Payroll(emp);
     }
 }
