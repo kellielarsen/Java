@@ -1,6 +1,6 @@
 package com.github.kellielarsen.collectionsproject;
 /*
-* @author kelli
+@author kellie
 */
 public class Tax {
     double taxRate;
