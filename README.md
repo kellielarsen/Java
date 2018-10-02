@@ -1,1 +1,8 @@
 # Java
+Kattis Problem: Above Average
+
+Solution: https://github.com/kellielarsen/Java/tree/master/KattisProblem/src
+
+Notes: Some of the tests were not passed because the expected result was one digit off. I could not figure out how to make them match exactly to 15 decimal places. The test was also saying that there was an IndexOutOfBoundsException, although it ran without crashing and provided accurate results in Netbeans.
+
+-- I'm ok with that.  It passes some tests you wrote.  Looks like you are dividing with integers which may not be what you want (3/2 = 1 not 1.5).  Also size & grades should be instance variables, so you don't have to pass them everywhere.
