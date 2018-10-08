@@ -1,8 +1,7 @@
 package com.github.kellielarsen.collectionsproject;
 import java.util.LinkedList;
-/*
-@author kellie
-*/
+
+/* @author kellie */
 public class Employee {
     String name;
     int id;

@@ -1,9 +1,8 @@
 package com.github.kellielarsen.collectionsproject;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
-/*
-@author kellie
-*/
+
+/* @author kellie */
 public class Payroll {
     
     double totalPay = 0;
