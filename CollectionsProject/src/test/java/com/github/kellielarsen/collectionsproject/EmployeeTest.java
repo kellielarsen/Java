@@ -35,8 +35,7 @@ public class EmployeeTest {
     public void testCalculateTax() {
         System.out.println("calculateTax");
         Employee emp = new Employee("Name", 12345, 10, 20);
-        Employee instance = emp;
-        instance.calculateTax(emp);
+        emp.calculateTax(emp);
         double expectedPay = 180.0;
         assert(expectedPay == emp.pay);
     }   
