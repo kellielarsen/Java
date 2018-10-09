@@ -35,8 +35,6 @@ public class MainTest {
         System.out.println("main");
         String[] args = null;
         Main.main(args);
-
-        fail("The test case is a prototype.");
     }
 
     /* Test of run method, of class Main. */
@@ -45,8 +43,6 @@ public class MainTest {
         System.out.println("run");
         Main instance = new Main();
         instance.run();
-        
-        fail("The test case is a prototype.");
     }
     
 }
