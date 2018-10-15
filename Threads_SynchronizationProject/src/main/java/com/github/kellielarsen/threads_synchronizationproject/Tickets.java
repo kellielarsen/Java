@@ -2,7 +2,7 @@ package com.github.kellielarsen.threads_synchronizationproject;
 
 /* @author kellie */
 public class Tickets {
-    private int availableSeats = 10;
+    int availableSeats = 10;
     
     public synchronized void bookTicket(String name, int numSeats) {
         if ((availableSeats >= numSeats) && (numSeats > 0)) {
