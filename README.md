@@ -13,3 +13,10 @@ Notes: Some of the tests were not passed because the expected result was one dig
 Problem: Create a system to manage payroll for employees at a company
 
 Solution: https://github.com/kellielarsen/Java/tree/master/CollectionsProject
+
+
+*Threads/Synchronization Project*
+
+Problem: Create a program to sell bus tickets to customers simultaneously
+
+Solution: 
