@@ -8,6 +8,7 @@ Notes: Some of the tests were not passed because the expected result was one dig
 -- I'm ok with that.  It passes some tests you wrote.  Looks like you are dividing with integers which may not be what you want (3/2 = 1 not 1.5).  Also size & grades should be instance variables, so you don't have to pass them everywhere.
 
 
+
 *Collections Project*
 
 Problem: Create a system to manage payroll for employees at a company
@@ -15,8 +16,9 @@ Problem: Create a system to manage payroll for employees at a company
 Solution: https://github.com/kellielarsen/Java/tree/master/CollectionsProject
 
 
+
 *Threads/Synchronization Project*
 
 Problem: Create a program to sell bus tickets to customers simultaneously
 
-Solution: 
+Solution: https://github.com/kellielarsen/Java/tree/master/Threads_SynchronizationProject
