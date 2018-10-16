@@ -36,12 +36,15 @@ public class TicketsTest {
     public void testBookTicket() {
         System.out.println("bookTicket");
         String name = "";
-        int numSeats = 1;
         Tickets instance = new Tickets();
-        instance.bookTicket(name, numSeats);
-        assertEquals(instance.availableSeats, 9);
-        numSeats = 11;
-        instance.bookTicket(name, numSeats);
-        assertEquals(instance.availableSeats, 9);
+        instance.bookTicket(name, 5);
+        //should book 5 tickets with 5 remaining
+        assertEquals(instance.availableSeats, 5);
+        instance.bookTicket(name, 6);
+        //should not book any tickets, 5 remaining
+        assertEquals(instance.availableSeats, 5);
+        instance.bookTicket(name, 1);
+        //should book 1 ticket with 4 remaining
+        assertEquals(instance.availableSeats, 4);
     }
 }
