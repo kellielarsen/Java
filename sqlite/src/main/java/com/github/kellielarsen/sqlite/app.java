@@ -9,14 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class app {
- 
-    public static String DB = "test.db";
-    public static String URL = "jdbc:sqlite:" + DB;
     
     private Connection connect() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(URL);
+            conn = DriverManager.getConnection(db.DEFAULT_URL);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -35,7 +32,7 @@ public class app {
         }
     }
     
-    public static void createNewTable() {
+    public void createNewTable() {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS warehouses (\n"
                 + "	id integer PRIMARY KEY,\n"
@@ -43,7 +40,7 @@ public class app {
                 + "	capacity real\n"
                 + ");";
         
-        try (Connection conn = DriverManager.getConnection(URL);
+        try (Connection conn = connect();
                 Statement stmt = conn.createStatement()) {
             // create a new table
             stmt.execute(sql);
