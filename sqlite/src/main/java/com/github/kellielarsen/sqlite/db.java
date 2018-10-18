@@ -20,15 +20,14 @@ public class db {
     db() { this(DEFAULT_URL); }
     db(String url) { this.url = url; }
 
-
-    private Connection connection = null;
-
+    //thread-safe version of lazy instantiation
+    private Connection connection = null; //doesn't create connection if getConnection isn't called
     public Connection getConnection() {
-        if (connection == null) {
-            synchronized (this) {
-                if (connection == null) {
+        if (connection == null) { //if connection exists, return existing connection
+            synchronized (this) { //synchronize all threads
+                if (connection == null) { //check again after synchronization
                     try {
-                        connection = DriverManager.getConnection(url);
+                        connection = DriverManager.getConnection(url); //no connection exists, so create connection
                     } catch (SQLException ex) {
                         Logger.getLogger(db.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -40,12 +39,12 @@ public class db {
 
     private HashMap< String, PreparedStatement> preparedStatementCache = null;
     public static final int SQL_STATEMENT_TIMEOUT_SECONDS = 10;
-
-    public PreparedStatement getPreparedStatement(String sql) {
+    public PreparedStatement getPreparedStatement(String sql) { //fill-in-the-blank statement, template
+        //remembers prepared statements already made
         if (preparedStatementCache == null) {
             synchronized (this) {
                 if (preparedStatementCache == null) {
-                    preparedStatementCache = new HashMap< String, PreparedStatement>();
+                    preparedStatementCache = new HashMap< String, PreparedStatement>(); //create a cache if there is none
                 }
             }
         }
@@ -63,7 +62,7 @@ public class db {
                         preparedStatement
                                 = connection.prepareStatement(sql, keyMode);
                         preparedStatement.setQueryTimeout(SQL_STATEMENT_TIMEOUT_SECONDS);
-                        preparedStatementCache.put(sql, preparedStatement);
+                        preparedStatementCache.put(sql, preparedStatement); //add prepared statement to cache
                     } catch (SQLException ex) {
                         Logger.getLogger(db.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -74,11 +73,11 @@ public class db {
         return preparedStatement;
     }
 
-    ResultSet sql(String sql, Object... objects) {
+    ResultSet sql(String sql, Object... objects) { //whatever list of objects you want
         try {
             PreparedStatement preparedStatement = getPreparedStatement(sql);
             int index = 1;
-            for (Object object : objects) {
+            for (Object object : objects) { //loop through each object parameter
                 if (object instanceof Boolean) {
                     preparedStatement.setBoolean(index, (Boolean) object);
                 } else if (object instanceof Integer) {
