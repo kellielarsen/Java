@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class db {
     
-    public static String DEFAULT_DB = "tests.db";
+    public static String DEFAULT_DB = "guests.db";
     public static String DEFAULT_URL = "jdbc:sqlite:" + DEFAULT_DB;
 
     public final String url;
@@ -155,21 +155,14 @@ public class db {
         sql("drop table if exists person");
         sql("create table person (id integer primary key, name string)");
     }
-    
-    long insertPerson(String name) {
-        return longResult(sql("insert into person (name) values (?)",name));
-    }
 
-    String getPerson(long id) {
-        return stringResult(sql("select name from person where id=?",id));
+    String getGuest(int roomNumber) {
+        return stringResult(sql("select Name from Guests where RoomNumber = ?", roomNumber));
     }
 
     void run() {
         reset();
-        long aliceId = insertPerson("alice");
-        System.out.println("aliceId=" + aliceId);
-        long bobId = insertPerson("bob");
-        System.out.println("alice name=" + getPerson(aliceId));
+        System.out.println("Guest in room 105 = " + getGuest(105));
     }
 
 }

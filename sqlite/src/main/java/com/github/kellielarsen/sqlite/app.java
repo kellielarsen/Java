@@ -34,10 +34,12 @@ public class app {
     
     public void createNewTable() {
         // SQL statement for creating a new table
-        String sql = "CREATE TABLE IF NOT EXISTS warehouses (\n"
-                + "	id integer PRIMARY KEY,\n"
-                + "	name text NOT NULL,\n"
-                + "	capacity real\n"
+        String sql = "CREATE TABLE IF NOT EXISTS Guests (\n"
+                + "	Name text NOT NULL,\n"
+                + "	RoomNumber integer PRIMARY KEY,\n"
+                + "	NumGuests integer NOT NULL,\n"
+                + "     NumNights integer NOT NULL,\n"
+                + "     RoomType text NOT NULL,\n"
                 + ");";
         
         try (Connection conn = connect();
@@ -49,12 +51,15 @@ public class app {
         }
     }
     
-    public void insert(String name, double capacity) {
-        String sql = "INSERT INTO warehouses(name,capacity) VALUES(?,?)";
+    public void insert(String name, int roomNumber, int numGuests, int numNights, String roomType) {
+        String sql = "INSERT INTO Guests(Name, RoomNumber, NumGuests, NumNights, RoomType) VALUES(?, ?, ?, ?, ?)";
         try (Connection conn = this.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, name);
-            pstmt.setDouble(2, capacity);
+            pstmt.setInt(2, roomNumber);
+            pstmt.setInt(3, numGuests);
+            pstmt.setInt(4, numNights);
+            pstmt.setString(5, roomType);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -68,9 +73,9 @@ public class app {
     void run() {
         createNewDatabase();
         createNewTable();
-        insert("Raw Materials", 3000);
-        insert("Semifinished Goods", 4000);
-        insert("Finished Goods", 5000);
+        insert("Guest 1", 100, 2, 1, "1 King");
+        insert("Guest 2", 200, 4, 2, "2 Doubles");
+        insert("Guest 3", 105, 1, 3, "1 Double");
     }
 }
 
