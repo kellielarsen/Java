@@ -3,6 +3,7 @@ package com.github.kellielarsen.databaseproject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -11,10 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author kelli
- */
+/* @author kellie */
 public class DatabaseTest {
     
     public DatabaseTest() {
@@ -178,6 +176,20 @@ public class DatabaseTest {
         instance.sql(command);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
+    }
+
+    /* Test of delete method, of class Database. */
+    @Test
+    public void testDelete() throws SQLException {
+        System.out.println("delete");
+        String name = "";
+        Database instance = new Database();
+        instance.createNewDatabase();
+        instance.createNewTable();
+        instance.insert("Guest 1", 2, 1, 100, "1 King");
+        instance.delete(name);
+        ResultSet r = instance.sql("select * from Guests where name = ?", name);
+        assertTrue(!r.next());
     }
     
 }

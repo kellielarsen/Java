@@ -82,6 +82,23 @@ public class Database {
         }
     }
     
+    public void delete(String name) {
+        String sql = "DELETE FROM Guests WHERE Name = " + name;
+        try {
+            Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void readRecord(String name) {
+        Connection conn = this.connect();
+        String result = stringResult(sql("SELECT Name, RoomNumber, NumGuests, NumNights, RoomType FROM Guests WHERE Name = ?", name));
+        System.out.println(result);
+    }
+    
     private HashMap< String, PreparedStatement> preparedStatementCache = null;
     public static final int SQL_STATEMENT_TIMEOUT_SECONDS = 10;
     public PreparedStatement getPreparedStatement(String sql) { //fill-in-the-blank statement, template
@@ -206,5 +223,6 @@ public class Database {
         insert("Guest 1", 100, 2, 1, "1 King");
         insert("Guest 2", 200, 4, 2, "2 Doubles");
         insert("Guest 3", 105, 1, 3, "1 Double");
+        readRecord("Guest 1");
     }
 }
