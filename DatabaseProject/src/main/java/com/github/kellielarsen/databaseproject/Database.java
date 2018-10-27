@@ -7,16 +7,28 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class App {
-    private Connection connect() {
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(DB.DEFAULT_URL);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+public class Database {
+    
+    public static String db = "guests.db";
+    public static String url = "jdbc:sqlite:" + db;
+    
+    private Connection connection = null; //doesn't create connection if getConnection isn't called
+    public Connection connect() {
+        if (connection == null) { //if connection exists, return existing connection
+            synchronized (this) { //synchronize all threads
+                if (connection == null) { //check again after synchronization
+                    try {
+                        connection = DriverManager.getConnection(url); //no connection exists, so create connection
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
         }
-        return conn;
+        return connection;
     }
     
     public void createNewDatabase() {
@@ -34,11 +46,11 @@ public class App {
     public void createNewTable() {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS Guests (\n"
-                + "	Name text NOT NULL,\n"
-                + "	NumNights real NOT NULL,\n"
-                + "     NumGuests real NOT NULL,\n"
-                + "     RoomType text NOT NULL,\n"
-                + "     RoomNumber real NOT NULL,\n"
+                + "	Name text,\n"
+                + "	RoomNumber integer,\n"
+                + "	NumGuests integer,\n"
+                + "     NumNights integer,\n"
+                + "     RoomType text\n"
                 + ");";
         
         try (Connection conn = connect();
@@ -50,15 +62,15 @@ public class App {
         }
     }
     
-    public void insert(String name, int nights, int numGuests, String roomType, int roomNumber) {
-        String sql = "INSERT INTO Guests(Name, NumNights, NumGuests, RoomType, RoomNumber) VALUES(?, ?, ?, ?, ?)";
+    public void insert(String name, int roomNumber, int numGuests, int numNights, String roomType) {
+        String sql = "INSERT INTO Guests(Name, RoomNumber, NumGuests, NumNights, RoomType) VALUES(?, ?, ?, ?, ?)";
         try (Connection conn = this.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, name);
-            pstmt.setInt(2, nights);
+            pstmt.setInt(2, roomNumber);
             pstmt.setInt(3, numGuests);
-            pstmt.setString(4, roomType);
-            pstmt.setInt(5, roomNumber);
+            pstmt.setInt(4, numNights);
+            pstmt.setString(5, roomType);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -66,17 +78,14 @@ public class App {
     }
  
     public static void main(String[] args) {
-        new App().run();
+        new Database().run();
     }
     
     void run() {
         createNewDatabase();
         createNewTable();
-        insert("Guest 1", 3, 4, "2 Doubles", 105);
-        insert("Guest 2", 2, 2, "1 King", 223);
-        insert("Guest 3", 1, 3, "2 Doubles", 114);
+        insert("Guest 1", 100, 2, 1, "1 King");
+        insert("Guest 2", 200, 4, 2, "2 Doubles");
+        insert("Guest 3", 105, 1, 3, "1 Double");
     }
 }
-
-//item potent - an action that if repeated causes no harm
-     //ex. creating a new database each time does not destroy existing database
