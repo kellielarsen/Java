@@ -35,6 +35,7 @@ public class DatabaseTest {
     }
     
     /* Test of insert method, of class Database. */
+    /* CREATE */
     @Test
     public void testInsert() {
         System.out.println("insert");
@@ -51,20 +52,19 @@ public class DatabaseTest {
     }
 
     /* Test of delete method, of class Database. */
+    /* READ */
     @Test
-    public void testDelete() throws SQLException {
-        System.out.println("delete");
-        String name = "";
+    public void testReadRecord() {
+        System.out.println("readRecord");
+        String name = "Guest 1";
         Database instance = new Database();
         instance.createNewDatabase();
         instance.createNewTable();
-        instance.insert("Guest 1", 100, 2, 1, "1 King");
-        instance.delete(name);
-        ResultSet r = instance.sql("select * from Guests where name = ?", name);
-        assertTrue(!r.next());
+        instance.readRecord(name);
     }
 
     /* Test of update method, of class Database. */
+    /* UPDATE */
     @Test
     public void testUpdate() {
         System.out.println("update");
@@ -76,20 +76,22 @@ public class DatabaseTest {
         Database instance = new Database();
         instance.createNewDatabase();
         instance.createNewTable();
-        instance.insert("Guest 1", 100, 2, 1, "1 King");
         instance.update(name, roomNumber, numGuests, numNights, roomType);
         assertEquals(instance.stringResult(instance.sql("SELECT RoomNumber FROM Guests WHERE Name = ?", name)), Integer.toString(roomNumber));
     }
 
     /* Test of readRecord method, of class Database. */
+    /* DELETE */
     @Test
-    public void testReadRecord() {
-        System.out.println("readRecord");
-        String name = "";
+    public void testDelete() throws SQLException {
+        System.out.println("delete");
+        String name = "Guest 1";
         Database instance = new Database();
-        instance.readRecord(name);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.createNewDatabase();
+        instance.createNewTable();
+        instance.delete(name);
+        ResultSet r = instance.sql("select * from Guests where name = ?", name);
+        assertTrue(!r.next());
     }
     
 }

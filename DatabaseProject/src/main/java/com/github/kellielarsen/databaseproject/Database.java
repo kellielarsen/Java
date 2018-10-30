@@ -82,19 +82,20 @@ public class Database {
         }
     }
     
-    public void delete(String name) {
-        String sql = "DELETE FROM Guests WHERE Name = " + name;
+    public void readRecord(String name) {
+        String sql = "SELECT * FROM Guests WHERE Name = " + name;
         try {
             Connection conn = this.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.executeUpdate();
+            ResultSet r = pstmt.executeQuery(sql);
+            System.out.println(stringResult(r));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
     
     public void update(String name, int roomNumber, int numGuests, int numNights, String roomType) {
-        String sql = "UPDATE Guests SET Name = ?," + "RoomNumber = ?," + "NumGuests = ?," + "NumNights = ?," + "RoomType = ?" + "WHERE Name = " + name;
+        String sql = "UPDATE Guests SET Name = ?," + "RoomNumber = ?," + "NumGuests = ?," + "NumNights = ?," + "RoomType = ?" + "WHERE Name = ?";
         try {
             Connection conn = this.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -103,16 +104,23 @@ public class Database {
             pstmt.setInt(3, numGuests);
             pstmt.setInt(4, numNights);
             pstmt.setString(5, roomType);
+            pstmt.setString(6, name);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
     
-    public void readRecord(String name) {
-        Connection conn = this.connect();
-        String result = stringResult(sql("SELECT * FROM Guests WHERE Name = ?", name));
-        System.out.println(result);
+    public void delete(String name) {
+        String sql = "DELETE FROM Guests WHERE Name = ?";
+        try {
+            Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     private HashMap< String, PreparedStatement> preparedStatementCache = null;
