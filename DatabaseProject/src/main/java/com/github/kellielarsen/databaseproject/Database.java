@@ -255,17 +255,5 @@ public class Database {
             System.out.println(e.getMessage());
         }
     }
- 
-    public static void main(String[] args) {
-        new Database().run();
-    }
     
-    void run() {
-        createNewDatabase();
-        createNewTable();
-        insert("Guest 1", 100, 2, 1, "1 King");
-        insert("Guest 2", 200, 4, 2, "2 Doubles");
-        insert("Guest 3", 105, 1, 3, "1 Double");
-        readRecord("Guest 1");
-    }
 }
