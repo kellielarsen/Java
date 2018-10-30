@@ -93,9 +93,25 @@ public class Database {
         }
     }
     
+    public void update(String name, int roomNumber, int numGuests, int numNights, String roomType) {
+        String sql = "UPDATE Guests SET Name = ?," + "RoomNumber = ?," + "NumGuests = ?," + "NumNights = ?," + "RoomType = ?" + "WHERE Name = " + name;
+        try {
+            Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setInt(2, roomNumber);
+            pstmt.setInt(3, numGuests);
+            pstmt.setInt(4, numNights);
+            pstmt.setString(5, roomType);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public void readRecord(String name) {
         Connection conn = this.connect();
-        String result = stringResult(sql("SELECT Name, RoomNumber, NumGuests, NumNights, RoomType FROM Guests WHERE Name = ?", name));
+        String result = stringResult(sql("SELECT * FROM Guests WHERE Name = ?", name));
         System.out.println(result);
     }
     
