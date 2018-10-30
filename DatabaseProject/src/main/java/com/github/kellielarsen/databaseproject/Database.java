@@ -82,16 +82,35 @@ public class Database {
         }
     }
     
-    public void readRecord(String name) {
-        String sql = "SELECT * FROM Guests WHERE Name = " + name;
+    public String readRecord(String name) {
+        String result = "";
         try {
             Connection conn = this.connect();
+            String sql = "SELECT RoomNumber FROM Guests WHERE Name = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            ResultSet r = pstmt.executeQuery(sql);
-            System.out.println(stringResult(r));
+            pstmt.setString(1, name);
+            result += "Name = " + name + ", ";
+            String roomNum = Long.toString(longResult(pstmt.executeQuery()));
+            result += "RoomNumber = " + roomNum + ", ";
+            sql = "SELECT NumGuests FROM Guests WHERE Name = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            String numGuests = Long.toString(longResult(pstmt.executeQuery()));
+            result += "NumGuests = " + numGuests + ", ";
+            sql = "SELECT NumNights FROM Guests WHERE Name = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            String numNights = Long.toString(longResult(pstmt.executeQuery()));
+            result += "NumNights = " + numNights + ", ";
+            sql = "SELECT RoomType FROM Guests WHERE Name = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            String roomType = stringResult(pstmt.executeQuery());
+            result += "RoomType = " + roomType;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return result;
     }
     
     public void update(String name, int roomNumber, int numGuests, int numNights, String roomType) {
