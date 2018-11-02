@@ -20,3 +20,10 @@ Solution: https://github.com/kellielarsen/Java/tree/master/CollectionsProject
 Problem: Create a program to sell bus tickets to customers simultaneously
 
 Solution: https://github.com/kellielarsen/Java/tree/master/Threads_SynchronizationProject
+<br />
+
+*Database Project*
+
+Problem: Create a database program containing hotel guests that has create, read, update, and delete functionality
+
+Solution: https://github.com/kellielarsen/Java/tree/master/DatabaseProject
