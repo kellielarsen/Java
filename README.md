@@ -27,3 +27,5 @@ Solution: https://github.com/kellielarsen/Java/tree/master/Threads_Synchronizati
 Problem: Create a database program containing hotel guests that has create, read, update, and delete functionality
 
 Solution: https://github.com/kellielarsen/Java/tree/master/DatabaseProject
+
+Proof of tests passed is in testsScreenshots folder, proof of database changes is in databaseScreenshots folder
