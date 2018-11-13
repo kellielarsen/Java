@@ -3,10 +3,11 @@ package com.github.kellielarsen.finalproject;
 import java.io.*;
 import java.net.*;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 /* @author kellie */
-public class ChatRoom {
+public class ChatRoom implements ActionListener {
     
     String name = "Chatroom: Server";
     JFrame newFrame = new JFrame(name);
@@ -25,6 +26,7 @@ public class ChatRoom {
         bottom.setLayout(new GridBagLayout());
         msgBox = new JTextField(30);
         sendMsg = new JButton("Send");
+        sendMsg.addActionListener(this);
         chat = new JTextArea();
         chat.setEditable(false);
         chat.setFont(new Font("Serif", Font.PLAIN, 15));
@@ -59,6 +61,8 @@ public class ChatRoom {
                     in = new DataInputStream(sock.getInputStream());
                     while (true) {
                         //receive messages
+                        String msg = in.readUTF();
+                        chat.append("User: " + msg + "\n");
                     }
                 }
                 catch (IOException err) {
@@ -69,6 +73,26 @@ public class ChatRoom {
         catch (IOException err) {
             System.out.println("Error: " + err.getMessage());
         }
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (msgBox.getText().length() < 1) {
+            // do nothing
+        } else if (msgBox.getText().equals("cls")) {
+            chat.setText("");
+            msgBox.setText("");
+        } else {
+            chat.append("Me: " + msgBox.getText() + "\n");
+            try {
+                out.writeUTF(msgBox.getText());
+            }
+            catch (IOException err) {
+                System.out.println("Error: " + err.getMessage());
+            }
+            msgBox.setText("");
+        }
+        msgBox.requestFocusInWindow();
     }
     
     public static void main(String args[]) throws IOException {
