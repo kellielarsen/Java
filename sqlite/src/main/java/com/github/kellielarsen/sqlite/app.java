@@ -36,10 +36,10 @@ public class app {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS Guests (\n"
                 + "	Name text,\n"
-                + "	RoomNumber integer PRIMARY KEY,\n"
+                + "	RoomNumber integer,\n"
                 + "	NumGuests integer,\n"
                 + "     NumNights integer,\n"
-                + "     RoomType text,\n"
+                + "     RoomType text\n"
                 + ");";
         
         try (Connection conn = connect();
