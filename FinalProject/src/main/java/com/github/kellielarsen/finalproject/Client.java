@@ -7,31 +7,48 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /* @author kellie */
-public class Client implements ActionListener {
+public class Client {
+    final static int port = 5000;
+    JFrame loginFrame = new JFrame("Join Chat");
+    JTextField userName;
+    boolean validUsername;
+    JButton joinChat;
     
-    String name = "Chatroom: Client";
-    JFrame newFrame = new JFrame(name);
-    JButton sendMsg;
-    JTextField msgBox;
-    JTextArea chat;
-    Socket sock;
-    DataOutputStream out;
-    DataInputStream in;
-    
-    public void display() {
-        newFrame.setSize(500, 300);
+    public void login(Socket sock, DataInputStream in, DataOutputStream out) {
+        loginFrame.setSize(500, 300);
         JPanel main = new JPanel();
         JPanel bottom = new JPanel();
         main.setLayout(new BorderLayout());
         bottom.setLayout(new GridBagLayout());
-        msgBox = new JTextField(30);
-        sendMsg = new JButton("Send");
-        sendMsg.addActionListener(this);
-        chat = new JTextArea();
-        chat.setEditable(false);
-        chat.setFont(new Font("Serif", Font.PLAIN, 15));
-        chat.setLineWrap(true);
-        main.add(new JScrollPane(chat), BorderLayout.CENTER);
+        userName = new JTextField(30);
+        JTextArea err = new JTextArea("Please choose a username:\n");
+        err.setEditable(false);
+        err.setFont(new Font("Serif", Font.PLAIN, 15));
+        err.setLineWrap(true);
+        joinChat = new JButton(new AbstractAction("Join chat") {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                try {
+                    out.writeUTF(userName.getText());
+                    switch (in.readUTF()) {
+                        case "valid":
+                            loginFrame.dispose();
+                            break;
+                        case "short":
+                            err.setText("Username is too short. Try again\n");
+                            break;
+                        case "taken":
+                            err.setText("Username is taken. Try again\n");
+                            break;
+                        default:
+                            err.setText("Error\n");
+                    }
+                }
+                catch (IOException err) {
+                    System.out.println("Error: " + err);
+                }
+            }
+        });
         GridBagConstraints left = new GridBagConstraints();
         left.anchor = GridBagConstraints.LINE_START;
         left.fill = GridBagConstraints.HORIZONTAL;
@@ -43,52 +60,19 @@ public class Client implements ActionListener {
         right.fill = GridBagConstraints.NONE;
         right.weightx = 1.0D;
         right.weighty = 1.0D;
-        bottom.add(msgBox, left);
-        bottom.add(sendMsg, right);
+        bottom.add(userName, left);
+        bottom.add(joinChat, right);
+        main.add(err);
         main.add(BorderLayout.SOUTH, bottom);
-        newFrame.add(main);
-        newFrame.setVisible(true);
+        loginFrame.add(main);
+        loginFrame.setVisible(true);
     }
     
-    public void start() {
-        try {
-            sock = new Socket("127.0.0.1", 5000);
-            out = new DataOutputStream(sock.getOutputStream());
-            in = new DataInputStream(sock.getInputStream());
-            while (true) {
-                //receive messages
-                String msg = in.readUTF();
-                chat.append("User: " + msg + "\n");
-            }
-        }
-        catch (IOException err) {
-            System.out.println("Error: " + err.getMessage());
-        }
-    }
-    
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        if (msgBox.getText().length() < 1) {
-            // do nothing
-        } else if (msgBox.getText().equals("cls")) {
-            chat.setText("");
-            msgBox.setText("");
-        } else {
-            chat.append("Me: " + msgBox.getText() + "\n");
-            try {
-                out.writeUTF(msgBox.getText());
-            }
-            catch (IOException err) {
-                System.out.println("Error: " + err.getMessage());
-            }
-            msgBox.setText("");
-        }
-        msgBox.requestFocusInWindow();
-    }
-    
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         Client c = new Client();
-        c.display();
-        c.start();
+        Socket sock = new Socket("127.0.0.1", port);
+        DataOutputStream out = new DataOutputStream(sock.getOutputStream());
+        DataInputStream in = new DataInputStream(sock.getInputStream());
+        c.login(sock, in, out);
     }
 }
