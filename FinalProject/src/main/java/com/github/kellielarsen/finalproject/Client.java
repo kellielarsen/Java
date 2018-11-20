@@ -37,7 +37,7 @@ public class Client {
         usernameField = new JTextField(30);
         JTextArea err = new JTextArea("Please choose a username:\n");
         err.setEditable(false);
-        err.setFont(new Font("Serif", Font.PLAIN, 15));
+        err.setFont(new Font("Arial", Font.PLAIN, 15));
         err.setLineWrap(true);
         joinChat = new JButton(new AbstractAction("Join chat") {
             @Override
@@ -97,7 +97,7 @@ public class Client {
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (msgBox.getText().length() < 1) {
-                    // do nothing
+                    //do nothing
                 } else if (msgBox.getText().equals("cls")) {
                     chat.setText("");
                     msgBox.setText("");
@@ -116,7 +116,7 @@ public class Client {
         });
         chat = new JTextArea();
         chat.setEditable(false);
-        chat.setFont(new Font("Serif", Font.PLAIN, 15));
+        chat.setFont(new Font("Arial", Font.PLAIN, 15));
         chat.setLineWrap(true);
         main.add(new JScrollPane(chat), BorderLayout.CENTER);
         GridBagConstraints left = new GridBagConstraints();
@@ -171,8 +171,6 @@ public class Client {
             }
         }
     }
-    
-
     
     public static void main(String args[]) {
         Client c = new Client("127.0.0.1", 5000);
