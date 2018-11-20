@@ -8,19 +8,33 @@ import javax.swing.*;
 
 /* @author kellie */
 public class Client {
-    final static int port = 5000;
+    private static String host;
+    private static int port;
+    private Socket sock;
     JFrame loginFrame = new JFrame("Join Chat");
-    JTextField userName;
-    boolean validUsername;
+    JFrame chatFrame;
+    JTextField usernameField;
     JButton joinChat;
+    JButton sendMsg;
+    JTextField msgBox;
+    JTextArea chat;
+    String username;
+    DataInputStream in;
+    DataOutputStream out;
+    boolean loggedIn;
     
-    public void login(Socket sock, DataInputStream in, DataOutputStream out) {
+    public Client(String _host, int _port) {
+        host = _host;
+        port = _port;
+    }
+    
+    private void login() {
         loginFrame.setSize(500, 300);
         JPanel main = new JPanel();
         JPanel bottom = new JPanel();
         main.setLayout(new BorderLayout());
         bottom.setLayout(new GridBagLayout());
-        userName = new JTextField(30);
+        usernameField = new JTextField(30);
         JTextArea err = new JTextArea("Please choose a username:\n");
         err.setEditable(false);
         err.setFont(new Font("Serif", Font.PLAIN, 15));
@@ -29,10 +43,13 @@ public class Client {
             @Override
             public void actionPerformed(ActionEvent event) {
                 try {
-                    out.writeUTF(userName.getText());
+                    out.writeUTF(usernameField.getText());
                     switch (in.readUTF()) {
                         case "valid":
+                            username = usernameField.getText();
+                            loggedIn = true;
                             loginFrame.dispose();
+                            display();
                             break;
                         case "short":
                             err.setText("Username is too short. Try again\n");
@@ -60,7 +77,7 @@ public class Client {
         right.fill = GridBagConstraints.NONE;
         right.weightx = 1.0D;
         right.weighty = 1.0D;
-        bottom.add(userName, left);
+        bottom.add(usernameField, left);
         bottom.add(joinChat, right);
         main.add(err);
         main.add(BorderLayout.SOUTH, bottom);
@@ -68,11 +85,97 @@ public class Client {
         loginFrame.setVisible(true);
     }
     
-    public static void main(String args[]) throws IOException {
-        Client c = new Client();
-        Socket sock = new Socket("127.0.0.1", port);
-        DataOutputStream out = new DataOutputStream(sock.getOutputStream());
-        DataInputStream in = new DataInputStream(sock.getInputStream());
-        c.login(sock, in, out);
+    public void display() {
+        chatFrame = new JFrame("Logged in as: " + this.username);
+        chatFrame.setSize(500, 300);
+        JPanel main = new JPanel();
+        JPanel bottom = new JPanel();
+        main.setLayout(new BorderLayout());
+        bottom.setLayout(new GridBagLayout());
+        msgBox = new JTextField(30);
+        sendMsg = new JButton(new AbstractAction("Send") {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                if (msgBox.getText().length() < 1) {
+                    // do nothing
+                } else if (msgBox.getText().equals("cls")) {
+                    chat.setText("");
+                    msgBox.setText("");
+                } else {
+                    chat.append("Me: " + msgBox.getText() + "\n");
+                    try {
+                        out.writeUTF(msgBox.getText());
+                    }
+                    catch (IOException err) {
+                        System.out.println("Error: " + err.getMessage());
+                    }
+                    msgBox.setText("");
+                }
+                msgBox.requestFocusInWindow();
+            }
+        });
+        chat = new JTextArea();
+        chat.setEditable(false);
+        chat.setFont(new Font("Serif", Font.PLAIN, 15));
+        chat.setLineWrap(true);
+        main.add(new JScrollPane(chat), BorderLayout.CENTER);
+        GridBagConstraints left = new GridBagConstraints();
+        left.anchor = GridBagConstraints.LINE_START;
+        left.fill = GridBagConstraints.HORIZONTAL;
+        left.weightx = 512.0D;
+        left.weighty = 1.0D;
+        GridBagConstraints right = new GridBagConstraints();
+        right.insets = new Insets(0, 10, 0, 0);
+        right.anchor = GridBagConstraints.LINE_END;
+        right.fill = GridBagConstraints.NONE;
+        right.weightx = 1.0D;
+        right.weighty = 1.0D;
+        bottom.add(msgBox, left);
+        bottom.add(sendMsg, right);
+        main.add(BorderLayout.SOUTH, bottom);
+        chatFrame.add(main);
+        chatFrame.setVisible(true);
+        startReading();
+    }
+    
+    public void connect() {
+        try {
+            sock = new Socket(host, port);
+            in = new DataInputStream(sock.getInputStream());
+            out = new DataOutputStream(sock.getOutputStream());
+        } catch (IOException err) {
+            System.out.println("Error: " + err.getMessage());
+        }
+        login();
+    }
+    
+    private void startReading() {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                readMsgs();
+            }
+        };
+        t.start();
+    }
+    
+    private void readMsgs() {
+        String inMsg;
+        while (true) {
+            try {
+                inMsg = in.readUTF();
+                chat.append(inMsg + "\n");
+            }
+            catch (IOException err) {
+                System.out.println("Error: " + err.getMessage());
+            }
+        }
+    }
+    
+
+    
+    public static void main(String args[]) {
+        Client c = new Client("127.0.0.1", 5000);
+        c.connect();
     }
 }
