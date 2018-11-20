@@ -42,7 +42,7 @@ public class ProxyClient extends Thread {
                     validUsername = true;
                 }
                 for (ProxyClient client : clients) {
-                    if (client.username.equals(username)) {
+                    if (client.username.equals(userTry)) {
                         out.writeUTF("taken");
                     }
                     else {
@@ -59,7 +59,7 @@ public class ProxyClient extends Thread {
         clients.add(this);
         //notify other online clients of logon
         clients.stream().filter((client) -> (!client.username.equals(username))).forEachOrdered((client) -> {
-            client.send(username + " is online.");
+            client.send(username + " is online");
         });
         handleChat();
     }
