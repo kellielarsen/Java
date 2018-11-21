@@ -1,5 +1,7 @@
 package com.github.kellielarsen.finalproject;
 
+import java.io.IOException;
+import java.net.Socket;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,41 +30,24 @@ public class ClientTest {
     @After
     public void tearDown() {
     }
+    
+    /* No test needed for login method, of class Client. */
 
-    /**
-     * Test of display method, of class Client.
-     */
-    @org.junit.Test
-    public void testDisplay() {
-        System.out.println("display");
-        Client instance = null;
-        instance.display();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    /* No test needed for display method, of class Client. */
 
-    /**
-     * Test of connect method, of class Client.
-     */
+    /* Test of connect method, of class Client. */
     @org.junit.Test
-    public void testConnect() {
+    public void testConnect() throws IOException {
         System.out.println("connect");
-        Client instance = null;
+        Server server = new Server(5000);
+        server.start();
+        Socket socket = new Socket();
+        ProxyClient proxyClient = new ProxyClient(server, socket);
+        Client instance = new Client("127.0.0.1", 5000);
         instance.connect();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(instance.sock.isConnected());
     }
 
-    /**
-     * Test of main method, of class Client.
-     */
-    @org.junit.Test
-    public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        Client.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    /* No test needed for main method, of class Client. */
     
 }

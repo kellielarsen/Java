@@ -32,9 +32,7 @@ public class ServerTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of getClients method, of class Server.
-     */
+    /* Test of getClients method, of class Server. */
     @org.junit.Test
     public void testGetClients() throws IOException {
         System.out.println("getClients");

@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Client {
     private static String host;
     private static int port;
-    private Socket sock;
+    public Socket sock;
     JFrame loginFrame = new JFrame("Join Chat");
     JFrame chatFrame;
     JTextField usernameField;
