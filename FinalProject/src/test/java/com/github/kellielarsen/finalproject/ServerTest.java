@@ -44,6 +44,7 @@ public class ServerTest {
         instance.clients.add(proxyClient1);
         instance.clients.add(proxyClient2);
         Set<ProxyClient> result = instance.getClients();
+        //test getClients
         assertTrue(result.contains(proxyClient1));
         assertTrue(result.contains(proxyClient2));
     }
@@ -57,8 +58,10 @@ public class ServerTest {
         Socket socket = new Socket("127.0.0.1", 5000);
         ProxyClient proxyClient = new ProxyClient(instance, socket);
         instance.clients.add(proxyClient);
+        //Clients is not empty
         assertFalse(instance.clients.isEmpty());
         instance.removeClient(proxyClient);
+        //Clients is empty after removeClient
         assertTrue(instance.clients.isEmpty());
     }
 
@@ -68,6 +71,7 @@ public class ServerTest {
         System.out.println("run");
         Server instance = new Server(5000);
         instance.start();
+        //thread is alive
         assertTrue(instance.isAlive());
     }
     

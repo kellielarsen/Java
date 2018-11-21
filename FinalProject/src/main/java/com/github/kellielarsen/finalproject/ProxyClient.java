@@ -61,6 +61,10 @@ public class ProxyClient extends Thread {
         clients.stream().filter((client) -> (!client.username.equals(username))).forEachOrdered((client) -> {
             client.send(username + " is online");
         });
+        for (ProxyClient client : clients) {
+            if (client.isAlive() && (this != client))
+                send(client.username + " is online");
+        }
         handleChat();
     }
     
