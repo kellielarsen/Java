@@ -29,16 +29,6 @@ public class ChatRoomTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of main method, of class ChatRoom.
-     */
-    @org.junit.Test
-    public void testMain() throws Exception {
-        System.out.println("main");
-        String[] args = null;
-        ChatRoom.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    /* No tests needed */
     
 }

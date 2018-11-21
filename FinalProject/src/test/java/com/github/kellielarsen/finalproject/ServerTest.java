@@ -1,5 +1,7 @@
 package com.github.kellielarsen.finalproject;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -34,39 +36,41 @@ public class ServerTest {
      * Test of getClients method, of class Server.
      */
     @org.junit.Test
-    public void testGetClients() {
+    public void testGetClients() throws IOException {
         System.out.println("getClients");
-        Server instance = null;
-        Set<ProxyClient> expResult = null;
+        Server instance = new Server(5000);
+        instance.start();
+        Socket socket = new Socket("127.0.0.1", 5000);
+        ProxyClient proxyClient1 = new ProxyClient(instance, socket);
+        ProxyClient proxyClient2 = new ProxyClient(instance, socket);
+        instance.clients.add(proxyClient1);
+        instance.clients.add(proxyClient2);
         Set<ProxyClient> result = instance.getClients();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(result.contains(proxyClient1));
+        assertTrue(result.contains(proxyClient2));
     }
 
-    /**
-     * Test of removeClient method, of class Server.
-     */
+    /* Test of removeClient method, of class Server. */
     @org.junit.Test
-    public void testRemoveClient() {
+    public void testRemoveClient() throws IOException {
         System.out.println("removeClient");
-        ProxyClient client = null;
-        Server instance = null;
-        instance.removeClient(client);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Server instance = new Server(5000);
+        instance.start();
+        Socket socket = new Socket("127.0.0.1", 5000);
+        ProxyClient proxyClient = new ProxyClient(instance, socket);
+        instance.clients.add(proxyClient);
+        assertFalse(instance.clients.isEmpty());
+        instance.removeClient(proxyClient);
+        assertTrue(instance.clients.isEmpty());
     }
 
-    /**
-     * Test of run method, of class Server.
-     */
+    /* Test of run method, of class Server. */
     @org.junit.Test
     public void testRun() {
         System.out.println("run");
-        Server instance = null;
-        instance.run();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Server instance = new Server(5000);
+        instance.start();
+        assertTrue(instance.isAlive());
     }
     
 }

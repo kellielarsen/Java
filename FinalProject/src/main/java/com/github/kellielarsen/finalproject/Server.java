@@ -8,7 +8,7 @@ import java.util.Set;
 /* @author kellie */
 public class Server extends Thread {
     private final int port;
-    private final Set<ProxyClient> clients = new HashSet<>();
+    public Set<ProxyClient> clients = new HashSet<>();
     
     public Server(int port) {
         this.port = port;
