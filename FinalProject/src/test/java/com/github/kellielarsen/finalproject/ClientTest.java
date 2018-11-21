@@ -41,8 +41,6 @@ public class ClientTest {
         System.out.println("connect");
         Server server = new Server(5000);
         server.start();
-        Socket socket = new Socket();
-        ProxyClient proxyClient = new ProxyClient(server, socket);
         Client instance = new Client("127.0.0.1", 5000);
         instance.connect();
         assertTrue(instance.sock.isConnected());
