@@ -12,7 +12,7 @@ public class ProxyClient extends Thread {
     public DataOutputStream out;
     public String outMsg;
     public String username;
-    public boolean hasMsg;
+    public boolean validUsername = false;
     private final Server server;
     public Set<ProxyClient> clients = new HashSet<>();
     
@@ -33,19 +33,22 @@ public class ProxyClient extends Thread {
     
     public void handleLogin() throws IOException {
         clients = server.getClients();
-        boolean validUsername = false;
         String userTry = "";
         while (!validUsername) {
+            boolean taken = false;
             userTry = in.readUTF();
             if (userTry.length() > 1) {
                 if (clients.isEmpty()) {
                     validUsername = true;
                 }
-                for (ProxyClient client : clients) {
-                    if (client.username.equals(userTry)) {
-                        out.writeUTF("taken");
+                else {
+                    for (ProxyClient client : clients) {
+                        if (userTry.equals(client.username)) {
+                            out.writeUTF("taken");
+                            taken = true;
+                        }
                     }
-                    else {
+                    if (taken == false) {
                         validUsername = true;
                     }
                 }
@@ -62,7 +65,7 @@ public class ProxyClient extends Thread {
             client.send(username + " is online");
         });
         for (ProxyClient client : clients) {
-            if (client.isAlive() && (this != client))
+            if (!client.username.equals(this.username))
                 send(client.username + " is online");
         }
         handleChat();
@@ -73,9 +76,18 @@ public class ProxyClient extends Thread {
         while (true) {
             try {
                 outMsg = in.readUTF();
-                clients.stream().filter((client) -> (!username.equals(client.username))).forEachOrdered((client) -> {
-                    client.send(username + ": " + outMsg);
-                });
+                if (outMsg.equals("logout")) {
+                    clients.stream().filter((client) -> (!username.equals(client.username))).forEachOrdered((client) -> {
+                        client.send(username + " logged off");
+                    });
+                    clients.remove(this);
+                    sock.close();
+                }
+                else {
+                    clients.stream().filter((client) -> (!username.equals(client.username))).forEachOrdered((client) -> {
+                        client.send(username + ": " + outMsg);
+                    });
+                }
             }
             catch(IOException err) {
                 System.out.println("Error: " + err.getMessage());

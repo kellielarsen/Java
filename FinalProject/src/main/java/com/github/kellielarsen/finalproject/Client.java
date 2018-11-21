@@ -98,10 +98,23 @@ public class Client {
             public void actionPerformed(ActionEvent event) {
                 if (msgBox.getText().length() < 1) {
                     //do nothing
-                } else if (msgBox.getText().equals("cls")) {
+                }
+                else if (msgBox.getText().equals("cls")) {
                     chat.setText("");
                     msgBox.setText("");
-                } else {
+                }
+                else if (msgBox.getText().equals("logout")) {
+                    try {
+                        out.writeUTF(msgBox.getText());
+                        sock.close();
+                        System.exit(0);
+                    }
+                    catch (IOException err) {
+                        System.out.println("Error: " + err.getMessage());
+                    }
+                    chatFrame.dispose();
+                }
+                else {
                     chat.append("Me: " + msgBox.getText() + "\n");
                     try {
                         out.writeUTF(msgBox.getText());
