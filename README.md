@@ -29,3 +29,20 @@ Problem: Create a database program containing hotel guests that has create, read
 Solution: https://github.com/kellielarsen/Java/tree/master/DatabaseProject
 
 Proof of tests passed is in testsScreenshots folder, proof of database changes is in databaseScreenshots folder
+<br />
+
+                            Android App Project
+                            
+Problem: Create a tic tac toe game as an Android app
+
+Solution: https://github.com/kellielarsen/Java/tree/master/AndroidApp/app
+
+Reference: https://www.youtube.com/watch?v=apDL78MFR3o
+<br />
+
+                            Final Project
+                            
+ Problem: Create a multi-threaded chat application that allows many clients to chat with each other
+ 
+ Solution: https://github.com/kellielarsen/Java/tree/master/FinalProject
+ <br />
