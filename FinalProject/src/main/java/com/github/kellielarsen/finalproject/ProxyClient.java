@@ -73,6 +73,8 @@ public class ProxyClient extends Thread {
     
     public void handleChat() {
         clients = server.getClients();
+        if (clients.size() == 1)
+            this.send("There are no other users currently online");
         while (true) {
             try {
                 outMsg = in.readUTF();

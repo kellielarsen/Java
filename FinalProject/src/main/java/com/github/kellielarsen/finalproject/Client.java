@@ -88,6 +88,7 @@ public class Client {
     public void display() {
         chatFrame = new JFrame("Logged in as: " + this.username);
         chatFrame.setSize(500, 300);
+        chatFrame.setBackground(Color.pink);
         JPanel main = new JPanel();
         JPanel bottom = new JPanel();
         main.setLayout(new BorderLayout());
